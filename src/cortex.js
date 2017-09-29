@@ -44,9 +44,27 @@ module.exports = (function() {
       }
     }
 
+    __remove(path) {
+      for(var i = 0, ii = this.__diffs.length; i < ii; i++) {
+        var match = true;
+
+        for(var j = 0, jj = path.length; j < jj; j++) {
+          if (path[j] !== this.__diffs[i].path[j]) {
+            match = false;
+          }
+        }
+
+        if (match) {
+          this.__diffs.splice(i);
+        }
+      }
+    }
+
     __subscribe() {
       this.__eventId = cortexPubSub.subscribeToCortex((function(topic, data) {
         this.__update(data);
+      }).bind(this), (function(topic, path) {
+        this.__remove(path);
       }).bind(this));
     }
 
@@ -67,10 +85,11 @@ module.exports = (function() {
 
         // Reset everything on the old cortex including unsubscribe from pubsub.
         this.__callbacks = [];
-        this.__updating = false;
-        delete this.__diffs;
         cortexPubSub.unsubscribeFromCortex(this.__eventId);
       }
+
+      this.__updating = false;
+      delete this.__diffs;
     }
 
     __runCallbacks(updatedCortex) {

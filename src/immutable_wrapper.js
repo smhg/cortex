@@ -64,6 +64,8 @@ module.exports = function(cortexPubSub) {
         }
 
         this.__notifyUpdate(diffs);
+      } else {
+        this.__notifyRemove(this.__path.slice());
       }
     }
 
@@ -100,6 +102,12 @@ module.exports = function(cortexPubSub) {
     __notifyUpdate(diffs) {
       if (diffs && diffs.length) {
         cortexPubSub.publish("update" + this.__eventId, diffs);
+      }
+    }
+
+    __notifyRemove(path) {
+      if (path && path.length) {
+        cortexPubSub.publish("remove" + this.__eventId, path);
       }
     }
 
