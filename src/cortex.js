@@ -55,7 +55,9 @@ module.exports = (function() {
         }
 
         if (match) {
-          this.__diffs.splice(i);
+          this.__diffs.splice(i, 1);
+          i--;
+          ii--;
         }
       }
     }
