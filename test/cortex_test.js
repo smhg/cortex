@@ -374,7 +374,7 @@ describe("Cortex", function() {
           });
 
           cortex.a.set(100);
-          cortex.a.set(1); // set back to original within the same tick
+          cortex.a.set(1); // revert within the same tick
           jasmine.clock().tick();
 
           expect(updated).toEqual(undefined); // no update should be triggered
@@ -382,7 +382,7 @@ describe("Cortex", function() {
           cortex.a.set(10);
           jasmine.clock().tick();
 
-          expect(updated.a.getValue()).toEqual(10); // no update should be triggered
+          expect(updated.a.getValue()).toEqual(10);
 
           updated = undefined;
           cortex = new Cortex(this.value, function(updatedCortex) {
@@ -392,7 +392,7 @@ describe("Cortex", function() {
           cortex.d.bar.set({a: 1, b: 2});
           jasmine.clock().tick();
 
-          expect(updated).toEqual(undefined); // no update should be triggered
+          expect(updated).toEqual(undefined);
         });
       });
     });
